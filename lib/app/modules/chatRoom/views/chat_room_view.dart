@@ -33,17 +33,34 @@ class ChatRoomView extends GetView<ChatRoomController> {
             SizedBox(height: 10),
             Expanded(
               // stream Builder apply
-              child: StreamBuilder(
-                stream: controller.getChats(controller.chatId),
+              child: FutureBuilder<QuerySnapshot>(
+                future:
+                    controller.chatId != null
+                        ? controller.getChats(controller.chatId)
+                        : null, // Ensure future is not null
+                builder: (context, snapshot) {
+                  // Handle loading state
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  return ListView(
-                    children:
-                        snapshot.data!.docs.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final doc = entry.value;
-                          return chatBubble(index, doc);
-                        }).toList(),
+                  // Handle error state
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  // Handle empty state or null data
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No messages yet.'));
+                  }
+
+                  // Display messages using ListView.builder
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final doc = snapshot.data!.docs[index];
+                      return chatBubble(index, doc); // Ensure chatBubble is defined
+                    },
                   );
                 },
               ),
@@ -147,12 +164,5 @@ class ChatRoomView extends GetView<ChatRoomController> {
         ),
       ),
     );
-  }
-}
-
-extension IndexedIterable<E> on Iterable<E> {
-  Iterable<T> mapIndexed<T>(T Function(int index, E e) f) {
-    var index = 0;
-    return map((e) => f(index++, e));
   }
 }
