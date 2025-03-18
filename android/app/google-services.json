@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "237976714075",
+    "project_id": "rablo-chat-32c70",
+    "storage_bucket": "rablo-chat-32c70.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237976714075:android:f79822981b7f224c48b87e",
+        "android_client_info": {
+          "package_name": "com.rabloChat.rablo_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcvwVOlvKEX2ix60TBvuljsqOy3Ta6oyk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
